@@ -100,12 +100,12 @@ const updatePosition = async (req, res) => {
   const user = req.user;
 
   try {
-    const leadToUpdate = await knex("leads").where({ id, user_id: user.id }).update({position});
+    const leadToUpdate = await knex("leads").where({ id, user_id: user.id }).update({position}).returning();
     if(!leadToUpdate){
       res.status(400).json({mensagem: "Não foi possível mover o lead"});
     }
 
-    return res.status(200).json();
+    return res.status(200).json(leadToUpdate);
   } catch (error) {
     return res.status(400).json({ mensagem: error.message });
   }
