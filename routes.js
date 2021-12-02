@@ -1,5 +1,5 @@
 const express = require("express");
-const { getLeads } = require("./controllers/leads");
+const { getLeads, createLead } = require("./controllers/leads");
 const { register, login } = require("./controllers/users");
 const { loginVerify } = require("./middlewares/loginVerify");
 
@@ -12,6 +12,7 @@ routes.post("/login", login);
 routes.use(loginVerify);
 
 routes.get("/leads", getLeads);
+routes.post("/leads", createLead);
 
 
 module.exports = routes;
