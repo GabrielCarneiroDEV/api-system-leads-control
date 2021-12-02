@@ -52,7 +52,7 @@ const login = async (req, res) => {
     const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (!verifyPassword) {
-      return res.status(400).json({ mensagem: "Nome ou senha não incorretos." });
+      return res.status(400).json({ mensagem: "Nome ou senha incorretos." });
     }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
