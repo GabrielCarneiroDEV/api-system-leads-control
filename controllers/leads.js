@@ -4,7 +4,7 @@ const getLeads = async (req, res) => {
   const user = req.user;
 
   try {
-    const leads = await knex("leads").where({ user_id: user.id });
+    const leads = await knex("leads").where({ user_id: user.id }).orderBy("id");
     return res.status(200).json(leads);
   } catch (error) {
     return res.status(400).json({ mensagem: error.message });
