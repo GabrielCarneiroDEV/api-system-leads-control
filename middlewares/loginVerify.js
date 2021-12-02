@@ -1,9 +1,15 @@
-const loginVerify = (req, res, next) => {
-  const { authorization } = req.authorization;
+const jwt = require("jsonwebtoken");
+const knex = require("../databaseConnection");
+
+const loginVerify = async (req, res, next) => {
+
+    const { authorization } = req.headers;
 
   if (!authorization) {
     return res.status(401).json({ mensagem: "não autorizado" });
   }
+
+
   try {
     const token = authorization.replace('Bearer ', '').trim();
 
@@ -22,6 +28,10 @@ const loginVerify = (req, res, next) => {
     next();
       
   } catch (error) {
-      res.status(400).json({mensagem: error.message})
+     return res.status(400).json({mensagem: error.message})
   }
 };
+
+module.exports = {
+    loginVerify
+}
