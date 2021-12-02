@@ -64,13 +64,11 @@ const editLead = async (req, res) => {
       pd,
       bpm,
       analytics,
-      user_id:user.id
+      user_id: user.id,
     });
 
     if (!updateLead) {
-      return res
-        .status(400)
-        .json({ mensagem: "Lead não encontrado" });
+      return res.status(400).json({ mensagem: "Lead não encontrado" });
     }
 
     return res
@@ -84,15 +82,29 @@ const editLead = async (req, res) => {
 const deleteLead = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedLead =  await knex("leads").where({id}).del()
-    
-    if(!deletedLead){
-        return res.status(404).json({mensagem: "Lead não encontrado."})
-    }
-    return res.status(200).json({mensagem:"lead excluído com sucesso!"});
+    const deletedLead = await knex("leads").where({ id }).del();
 
+    if (!deletedLead) {
+      return res.status(404).json({ mensagem: "Lead não encontrado." });
+    }
+    return res.status(200).json({ mensagem: "lead excluído com sucesso!" });
   } catch (error) {
-      res.status(400).json({mensagem: error.message})
+    res.status(400).json({ mensagem: error.message });
+  }
+};
+
+const updatePosition = async (req, res) => {
+  const { position, id } = req.body;
+
+  try {
+    const leadToUpdate = await knex("leads").where({ id }).update(position);
+    if(!leadToUpdate){
+      res.status(400).json({mensagem: "Não foi possível mover o lead"});
+    }
+
+    return res.status(200);
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
   }
 };
 
@@ -101,4 +113,5 @@ module.exports = {
   createLead,
   editLead,
   deleteLead,
+  updatePosition,
 };
