@@ -13,7 +13,7 @@ const register = async (req, res) => {
   try {
     const userExists = await knex("users")
       .select("*")
-      .where({ name: name.toLowerCase() })
+      .where({ name })
       .first();
     if (userExists) {
       return res.status(400).json({ mensagem: "Usuário já cadastrado" });
