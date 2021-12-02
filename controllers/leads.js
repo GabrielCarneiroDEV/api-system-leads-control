@@ -56,7 +56,7 @@ const editLead = async (req, res) => {
   }
 
   try {
-    const updateLead = await knex("leads").where({ id }).update({
+    const updateLead = await knex("leads").where({ id, user_id: user.id }).update({
       name,
       phone,
       email,
@@ -81,8 +81,9 @@ const editLead = async (req, res) => {
 
 const deleteLead = async (req, res) => {
   const { id } = req.params;
+  const user = req.user;
   try {
-    const deletedLead = await knex("leads").where({ id }).del();
+    const deletedLead = await knex("leads").where({ id, user_id:user.id }).del();
 
     if (!deletedLead) {
       return res.status(404).json({ mensagem: "Lead não encontrado." });
@@ -96,9 +97,10 @@ const deleteLead = async (req, res) => {
 const updatePosition = async (req, res) => {
   const { position } = req.body;
   const { id } = req.params;
+  const user = req.user;
 
   try {
-    const leadToUpdate = await knex("leads").where({ id }).update(position);
+    const leadToUpdate = await knex("leads").where({ id, usuario_id: user.id }).update({position});
     if(!leadToUpdate){
       res.status(400).json({mensagem: "Não foi possível mover o lead"});
     }
