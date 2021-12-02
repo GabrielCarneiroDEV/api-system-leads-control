@@ -1,10 +1,10 @@
 const express = require("express");
-const app = require("./server");
+const { register, login } = require("./controllers/users");
+
 const routes = express();
 
 
-routes.get("/", (req, res) => {
-    res.json("Testando")
-})
+routes.get("/register", register);
+routes.get("/login", login);
 
 module.exports = routes;
