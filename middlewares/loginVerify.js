@@ -1,0 +1,27 @@
+const loginVerify = (req, res, next) => {
+  const { authorization } = req.authorization;
+
+  if (!authorization) {
+    return res.status(401).json({ mensagem: "não autorizado" });
+  }
+  try {
+    const token = authorization.replace('Bearer ', '').trim();
+
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    const findUser = await knex('users').where({ id }).first();
+
+    if (!findUser) {
+        return res.status(404).json({ mensagem: 'Usuario não encontrado' });
+    }
+
+    const { password:_, ...user } = findUser;
+
+    req.user = user;
+
+    next();
+      
+  } catch (error) {
+      res.status(400).json({mensagem: error.message})
+  }
+};
