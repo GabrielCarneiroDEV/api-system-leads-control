@@ -15,7 +15,7 @@ routes.get("/leads", getLeads);
 routes.post("/leads", createLead);
 routes.put("/leads/:id", editLead);
 routes.delete("/leads/:id", deleteLead);
-routes.put("updatePosition/:id", updatePosition )
+routes.put("/updatePosition/:id", updatePosition )
 
 
 module.exports = routes;
