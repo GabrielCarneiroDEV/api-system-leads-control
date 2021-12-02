@@ -94,7 +94,8 @@ const deleteLead = async (req, res) => {
 };
 
 const updatePosition = async (req, res) => {
-  const { position, id } = req.body;
+  const { position } = req.body;
+  const { id } = req.params;
 
   try {
     const leadToUpdate = await knex("leads").where({ id }).update(position);
