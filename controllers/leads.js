@@ -84,8 +84,12 @@ const editLead = async (req, res) => {
 const deleteLead = async (req, res) => {
   const { id } = req.params;
   try {
-     await knex("leads").where({id}).del()
-     return res.status(200).json({mensagem:"lead excluído com sucesso!"})
+    const deletedLead =  await knex("leads").where({id}).del()
+    
+    if(!deletedLead){
+        return res.status(404).json({mensagem: "Lead não encontrado."})
+    }
+    return res.status(200).json({mensagem:"lead excluído com sucesso!"});
 
   } catch (error) {
       res.status(400).json({mensagem: error.message})
