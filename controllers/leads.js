@@ -105,7 +105,7 @@ const updatePosition = async (req, res) => {
       res.status(400).json({mensagem: "Não foi possível mover o lead"});
     }
 
-    return res.status(200);
+    return res.status(200).json();
   } catch (error) {
     return res.status(400).json({ mensagem: error.message });
   }
