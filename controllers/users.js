@@ -25,7 +25,7 @@ const register = async (req, res) => {
       password: encryptedPassword,
     });
 
-    res.status(400).json({ mensagem: "usuário cadastrado com sucesso!" });
+    res.status(200).json({ mensagem: "usuário cadastrado com sucesso!" });
   } catch (error) {
     res.status(400).json({ mensagem: error.message });
   }
