@@ -1,52 +1,100 @@
-const knex = require("../databaseConnection")
+const knex = require("../databaseConnection");
 
 const getLeads = async (req, res) => {
-    const user = req.user
+  const user = req.user;
 
-    try {
-        const leads = await knex("leads").where({user_id:user.id});
-        return res.status(200).json(leads);
-        
-    } catch (error) {
-        return res.status(400).json({mensagem: error.message});
+  try {
+    const leads = await knex("leads").where({ user_id: user.id });
+    return res.status(200).json(leads);
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
+  }
+};
+
+const createLead = async (req, res) => {
+  const user = req.user;
+  const { name, phone, email, rpa, pd, bpm, analytics } = req.body;
+  if (!name || !phone || !email) {
+    return res
+      .status(400)
+      .json({ mensagem: "Os campos nome, email e telefone são obrigatórios" });
+  }
+
+  try {
+    const newLead = await knex("leads").insert({
+      name,
+      phone,
+      email,
+      rpa,
+      pd,
+      bpm,
+      analytics,
+      user_id: user.id,
+    });
+
+    if (!newLead) {
+      return res
+        .status(400)
+        .json({ mensagem: "Não foi possível criar o lead" });
     }
 
-}
+    return res.status(200).json({ mensagem: "Lead criado com sucesso!" });
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
+  }
+};
 
-const createLead = async (req, res)=>{
-    const user = req.user;
-    const {name, phone, email} = req.body
-    if(!name || !phone || !email){
-        return res.status(400).json({mensagem:"Os campos nome, email e telefone são obrigatórios"});
+const editLead = async (req, res) => {
+  const { id } = req.params;
+  const user = req.user;
+  const { name, phone, email, rpa, pd, bpm, analytics } = req.body;
+
+  if (!name || !phone || !email) {
+    return res
+      .status(400)
+      .json({ mensagem: "Os campos nome, email e telefone são obrigatórios" });
+  }
+
+  try {
+    const updateLead = await knex("leads").where({ id }).update({
+      name,
+      phone,
+      email,
+      rpa,
+      pd,
+      bpm,
+      analytics,
+      user_id:user.id
+    });
+
+    if (!updateLead) {
+      return res
+        .status(400)
+        .json({ mensagem: "Lead não encontrado" });
     }
-    
 
-    try {
-        const newLead = await knex("leads").insert({name, phone, email, user_id: user.id})
-
-        if(!newLead){
-            return res.status(400).json({mensagem:"Não foi possível criar o lead"})
-        };
-
-        return res.status(200).json({mensagem: "Lead criado com sucesso!"})
-        
-    } catch (error) {
-        return res.status(400).json({mensagem: error.message})
-    }
-
-}
-
-const editLead =  async (req,res) =>{
-
-}
+    return res
+      .status(200)
+      .json({ mensagem: "Atualização concluída com sucesso!" });
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
+  }
+};
 
 const deleteLead = async (req, res) => {
+  const { id } = req.params;
+  try {
+     await knex("leads").where({id}).del()
+     return res.status(200).json({mensagem:"lead excluído com sucesso!"})
 
-}
+  } catch (error) {
+      res.status(400).json({mensagem: error.message})
+  }
+};
 
 module.exports = {
-    getLeads,
-    createLead,
-    editLead,
-    deleteLead
-}
+  getLeads,
+  createLead,
+  editLead,
+  deleteLead,
+};
