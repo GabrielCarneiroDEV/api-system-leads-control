@@ -4,7 +4,7 @@ const { register, login } = require("./controllers/users");
 const routes = express();
 
 
-routes.get("/register", register);
-routes.get("/login", login);
+routes.post("/register", register);
+routes.post("/login", login);
 
 module.exports = routes;
