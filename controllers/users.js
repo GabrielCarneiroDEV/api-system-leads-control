@@ -46,20 +46,20 @@ const login = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ mensagem: "O usuario não foi encontrado." });
+        .json({ mensagem: "Usuário não cadastrado" });
     }
 
     const verifyPassword = await bcrypt.compare(password, user.password);
 
     if (!verifyPassword) {
-      return res.status(400).json({ mensagem: "Email e senha não conferem." });
+      return res.status(400).json({ mensagem: "Nome ou senha não incorretos." });
     }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "8h",
     });
 
-    return res.status(200).json({ token, id: user.id, name  });
+    return res.status(200).json({ token, id: user.id, name });
   } catch (error) {
     res.status(400).json({ mensagem: error.message });
   }
